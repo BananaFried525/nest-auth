@@ -7,10 +7,7 @@ import { ApiHeader, ApiOperation, ApiQuery } from '@nestjs/swagger';
 
 @Controller('google')
 export class GoogleController {
-  constructor(
-    private readonly googleService: GoogleService,
-    private readonly googleValidate: GoogleValidate,
-  ) {}
+  constructor(private readonly googleService: GoogleService, private readonly googleValidate: GoogleValidate) { }
 
   @Post('token')
   @ApiOperation({ summary: 'Get anonymous token', tags: ['Anonymous'] })
@@ -18,9 +15,7 @@ export class GoogleController {
     @Request() req: RequestExpress,
   ): Promise<Types.GetTokenResponse> {
     const data: Types.GetTokenRequest = this.googleValidate.getToken(req);
-    const response: Types.GetTokenResponse = await this.googleService.getToken(
-      data,
-    );
+    const response: Types.GetTokenResponse = await this.googleService.getToken(data);
     return response;
   }
 
@@ -35,8 +30,7 @@ export class GoogleController {
     @Request() req: RequestExpress,
   ): Promise<Types.GetSignUrlResponse> {
     const data: Types.GetSignUrlRequest = this.googleValidate.getSignUrl(req);
-    const response: Types.GetSignUrlResponse =
-      await this.googleService.getSignUrl(data);
+    const response: Types.GetSignUrlResponse = await this.googleService.getSignUrl(data);
 
     return response;
   }
@@ -51,10 +45,8 @@ export class GoogleController {
   async signCallback(
     @Request() req: RequestExpress,
   ): Promise<Types.SignCallbackResponse> {
-    const data: Types.SignCallbackRequest =
-      this.googleValidate.signCallback(req);
-    const response: Types.SignCallbackResponse =
-      await this.googleService.signCallback(data);
+    const data: Types.SignCallbackRequest = this.googleValidate.signCallback(req);
+    const response: Types.SignCallbackResponse = await this.googleService.signCallback(data);
 
     return response;
   }
