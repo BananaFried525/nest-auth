@@ -1,3 +1,2 @@
-import { UserModel } from './user.model';
-
-export const User = UserModel;
+export * from './provider.model'
+export * from './user.model'

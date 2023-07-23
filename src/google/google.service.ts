@@ -12,7 +12,7 @@ export class GoogleService {
   constructor(
     private readonly logger: Logger,
     private readonly redis: RedisService,
-  ) {}
+  ) { }
 
   async getToken({
     userId,
@@ -50,6 +50,8 @@ export class GoogleService {
         scope: [
           'https://www.googleapis.com/auth/userinfo.email',
           'https://www.googleapis.com/auth/userinfo.profile',
+          'https://www.googleapis.com/auth/user.organization.read',
+          'https://www.googleapis.com/auth/admin.directory.orgunit.readonly'
         ],
         access_type: 'offline',
         login_hint: 'consent',
@@ -76,17 +78,25 @@ export class GoogleService {
       authClient.setCredentials({
         access_token: accessToken,
       });
-      const people = google.people({
-        version: 'v1',
+
+      // const people = google.people({
+      //   version: 'v1',
+      //   auth: authClient,
+      // });
+
+      // const user = await people.people.get({
+      //   resourceName: 'people/me',
+      //   personFields: 'photos,names,organizations',
+      // });
+
+      const oauth2Service = google.oauth2({
+        version: 'v2',
         auth: authClient,
-      });
+      })
 
-      const user = await people.people.get({
-        resourceName: 'people/me',
-        personFields: 'photos,names',
-      });
+      const userInfoRes = await oauth2Service.userinfo.get()
 
-      console.log(user);
+      console.log(JSON.stringify(userInfoRes.data))
 
       return {
         access_token: accessToken,

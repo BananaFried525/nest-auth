@@ -1,7 +1,11 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
+import { Provider } from 'src/helpers/database/models'
 
-@Table
-export class UserModel extends Model {
+@Table({
+  tableName: 'user',
+  modelName: 'User'
+})
+export class User extends Model<User> {
   @Column({
     field: 'id',
     primaryKey: true,
@@ -10,30 +14,64 @@ export class UserModel extends Model {
   })
   id: number;
 
+  @ForeignKey(() => Provider)
   @Column({
-    field: 'user_name',
-    unique: true,
-    type: DataType.STRING(255),
+    field: 'provider_id',
+    type: DataType.NUMBER,
   })
-  userName: string;
+  providerId: number;
 
   @Column({
     field: 'reference',
-    unique: true,
-    type: DataType.STRING(255),
+    allowNull: false,
+    type: DataType.STRING(10),
   })
   reference: string;
+
+  @Column({
+    field: 'email',
+    allowNull: true,
+    defaultValue: null,
+    type: DataType.STRING(255),
+  })
+  email: string | null;
+
+  @Column({
+    field: 'provider_reference',
+    allowNull: true,
+    defaultValue: null,
+    type: DataType.STRING(255),
+  })
+  providerReference: string | null;
+
+  @Column({
+    field: 'display_name',
+    allowNull: false,
+    type: DataType.STRING(255),
+  })
+  displayName: string;
+
+  @Column({
+    field: 'password',
+    allowNull: true,
+    defaultValue: null,
+    type: DataType.STRING(255),
+  })
+  password: string | null;
+
 
   @Column({
     field: 'created_at',
     type: DataType.DATE,
   })
-  createdAt?: Date;
+  createdAt: Date;
 
   @Column({
     field: 'updated_at',
     type: DataType.DATE,
-    onUpdate: 'SET DEFAULT',
   })
-  updatedAt?: Date;
+  updatedAt: Date;
+
+  @BelongsTo(() => Provider)
+  Provider?: Provider;
 }

@@ -11,9 +11,7 @@ export class GoogleController {
 
   @Post('token')
   @ApiOperation({ summary: 'Get anonymous token', tags: ['Anonymous'] })
-  async getToken(
-    @Request() req: RequestExpress,
-  ): Promise<Types.GetTokenResponse> {
+  async getToken(@Request() req: RequestExpress): Promise<Types.GetTokenResponse> {
     const data: Types.GetTokenRequest = this.googleValidate.getToken(req);
     const response: Types.GetTokenResponse = await this.googleService.getToken(data);
     return response;
@@ -26,9 +24,7 @@ export class GoogleController {
     description: 'token from getToken',
     required: true,
   })
-  async getSignUrl(
-    @Request() req: RequestExpress,
-  ): Promise<Types.GetSignUrlResponse> {
+  async getSignUrl(@Request() req: RequestExpress): Promise<Types.GetSignUrlResponse> {
     const data: Types.GetSignUrlRequest = this.googleValidate.getSignUrl(req);
     const response: Types.GetSignUrlResponse = await this.googleService.getSignUrl(data);
 
@@ -42,9 +38,7 @@ export class GoogleController {
     description: 'code that generate by google auth server',
     required: true,
   })
-  async signCallback(
-    @Request() req: RequestExpress,
-  ): Promise<Types.SignCallbackResponse> {
+  async signCallback(@Request() req: RequestExpress): Promise<Types.SignCallbackResponse> {
     const data: Types.SignCallbackRequest = this.googleValidate.signCallback(req);
     const response: Types.SignCallbackResponse = await this.googleService.signCallback(data);
 

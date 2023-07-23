@@ -3,8 +3,9 @@ import { GoogleModule } from './google/google.module';
 import { HelpersModule } from './helpers/helpers.module';
 import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { UserModule } from './user/user.module';
 import configs from './configs';
-import * as models from './helpers/database/models/index';
+import * as Models from 'src/helpers/database/models'
 
 @Module({
   imports: [
@@ -20,10 +21,11 @@ import * as models from './helpers/database/models/index';
       password: configs.database.mysql.password,
       database: configs.database.mysql.database,
       logging: true,
-      models: [models.User],
+      models: [Models.User, Models.Provider],
     }),
     GoogleModule,
     HelpersModule,
+    UserModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }
