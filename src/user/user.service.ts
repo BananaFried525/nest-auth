@@ -1,10 +1,10 @@
-import { Injectable, Logger, Post } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Sequelize } from 'sequelize-typescript';
-import { RedisService } from 'src/helpers/redis/redis.service';
 import * as Types from './user.type';
 import { Transaction } from 'sequelize';
 import { UserDatabase } from './user.database';
-import { BadRequestFilter } from 'src/boots/custom.filter';
+import { randomUUID } from 'crypto';
+// import { RedisService } from 'src/helpers/redis/redis.service';
 
 @Injectable()
 export class UserService {
@@ -28,10 +28,19 @@ export class UserService {
         shortName: providerName,
         dbTxn,
       })
-      if(!provider)  {
+      if (!provider) {
         throw new Error('provider not found.')
       }
 
+      const user = await this.database.createUser({
+        value: {
+          providerId: provider.id,
+          email: email,
+          displayName: displayName,
+          password: randomUUID().toString(),
+        },
+        dbTxn,
+      })
       await dbTxn.commit()
       return {}
     } catch (error) {
@@ -43,4 +52,18 @@ export class UserService {
     }
   }
 
+  async signWithGoogle({ }: Types.service.signWithGoogleParams): Promise<Types.service.signWithGoogleResponse> {
+    let dbTxn: Transaction
+    try {
+      dbTxn = await this.sequelize.transaction()
+
+      await dbTxn.commit()
+      return {}
+    } catch (error) {
+      if (dbTxn) {
+        await dbTxn.rollback()
+      }
+      throw error
+    }
+  }
 }

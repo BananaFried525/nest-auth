@@ -10,6 +10,14 @@ export namespace service {
 
   export type registerUserResponse = {
   }
+
+  export type signWithGoogleParams = {
+
+  }
+
+  export type signWithGoogleResponse = {
+    
+  }
 }
 
 export namespace database {
